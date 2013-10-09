@@ -4,31 +4,30 @@ class View
 {
     protected $assignList;
 
-    protected $filePath;
+    protected $renderContent = array();
 
-    protected $renderContent;
-
-    public function assign($data)
+    public function assign($name, $data)
     {
-        $this->assignList = $data;
+        $this->assignList[$name] = $data;
     }
 
-    public function setView($filePath)
-    {
-        $this->filePath = $filePath;
-    }
-
-    public function render()
+    public function render($templateName)
     {
         ob_start();
-        include 'view/product.tpl.php';
-        $this->renderContent = ob_get_clean();
-        return $this->renderContent;
+        $templatePath = $this->getTemplatePathByName($templateName);
+        include $templatePath;
+        $this->renderContent[$templateName] = ob_get_clean();
+        return $this->renderContent[$templateName];
     }
 
-    public function run()
+    private function getTemplatePathByName($name)
     {
-        echo $this->renderContent;
+        return sprintf('view/%s.tpl.php', $name);
+    }
+
+    public function show()
+    {
+        echo implode('', $this->renderContent);
     }
 
     public function __get($variable)

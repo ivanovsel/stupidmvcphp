@@ -9,4 +9,12 @@ class Model
             'name'  => 'Naf-naf'
         );
     }
+
+    public function getCategoryList()
+    {
+        return new ArrayObject(array(
+            '1' => 'Books',
+            '2' => 'PC'
+        ));
+    }
 }
